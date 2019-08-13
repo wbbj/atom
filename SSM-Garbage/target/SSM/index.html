@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+function userpage() {
+     window.location.href="http://localhost:8080/SSM/user.html";
+    // window.location.href="http://129.211.1.53:8080/SSM/user.html";
+}
+// 添加的ajax请求
+$(document).ready(function () {
+    $("#add").click(function (event) {event.preventDefault();
+        var gname =$("#gname").val();
+        var variety =$("#variety").val();
+        var describe =$("#describe").val();
+        var handle =$("#handle").val();
+        if(gname===""||variety===""||describe===""||handle===""){
+            alert("请输入完整信息");
+        }else {
+            $.ajax({
+                type: 'POST',
+                dataType: 'text',
+                url: 'createGarbage',
+                data: "gname="+encodeURI($('#gname').val())+"&variety="+encodeURI($('#variety').val())+"&describe="+encodeURI($('#describe').val())+"&handle="+encodeURI($('#handle').val()),
+                success: function (msg) {
+                    if (msg === "1") {
+                        alert("添加信息成功");
+                    }
+                    if (msg === "-1") {
+                        alert("已存在此垃圾");
+                    }
+                }
+            })
+        }
+    });
+    //查询
+    $("#search").click(function (event) {event.preventDefault();
+        var searchname =$("#searchname").val();
+        if(searchname===""){
+            alert("请输入要查询的垃圾");
+        }else {
+            $.ajax({
+                type: 'POST',
+                dataType: 'text',
+                url: 'queryGarbage',
+                data: "searchname="+encodeURI($('#searchname').val()),
+                success: function (msg) {
+                    if (msg === "-1") {
+                        alert("此垃圾不存在可以添加");
+                    } else if (msg === "1") {
+                        alert("此垃圾已存在无需添加");
+                    }
+                }
+            })
+        }
+    })
+});
+
+</script>
+<body>
+<div>
+    <button onclick="userpage()">垃圾分类查询页面</button>
+</div>
+<div>
+    <HR>
+</div>
+<h1>hello</h1>
+<div class="">
+<form>
+    <input type="text" id="searchname" name="searchname"/><button id="search">查询</button>
+</form>
+
+    <form>
+
+    <table class="table table-hover table-bordered">
+
+        <tr>
+            <td>是否有查找的垃圾</td>
+        </tr>
+        <tr>
+            <th><h5>名称</h5><input type="text" id="gname" name="gname"/></th>
+        </tr>
+        <tr>
+            <th><h5>种类</h5><input type="text" id="variety" name="variety"/></th>
+        </tr>
+        <tr>
+            <th><h5>描述</h5><input type="text" id="describe" name="describe"/></th>
+        </tr>
+        <tr>
+            <th><h5>处理方式</h5><input type="text" id="handle" name="handle"/></th>
+        </tr>
+
+    </table>
+        <button id="add">添加</button>
+
+    </form>
+</div>
+</body>
+</html>

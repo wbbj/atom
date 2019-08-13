@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--<configuration>-->
+<!--&lt;!&ndash;    设置别名:定义了一个别名user,代表了下面type里面的类,这样就可以在mybatis上下文中使用别名代替全限定名了&ndash;&gt;-->
+<!--    <typeAliases>-->
+<!--        <typeAlias type="com.wbb.mybatis.pojo.User" alias="user"/>-->
+<!--    </typeAliases>-->
+<!--&lt;!&ndash;    数据库配置&ndash;&gt;-->
+<!--&lt;!&ndash;    数据环境&ndash;&gt;-->
+<!--    <environments default="development">-->
+<!--        <environment id="development">-->
+<!--&lt;!&ndash;            配置事务管理器:这里采用Mybatis的JDBC管理方式&ndash;&gt;-->
+<!--            <transactionManager type="JDBC"/>-->
+<!--&lt;!&ndash;            配置数据库:POOLED代表采用Mybatis内部提供的连接池方式&ndash;&gt;-->
+<!--            <dataSource type="POOLED">-->
+<!--&lt;!&ndash;                JDBC属性信息&ndash;&gt;-->
+<!--                <property name="driver" value="com.mysql.jdbc.Driver"/>-->
+<!--                <property name="url" value="jdbc:mysql://localhost:3306/数据库名称"/>-->
+<!--                <property name="username" value="root"/>-->
+<!--                <property name="password" value="自己数据库的密码"/>-->
+<!--            </dataSource>-->
+<!--        </environment>-->
+<!--    </environments>-->
+<!--&lt;!&ndash;    映射器&ndash;&gt;-->
+<!--    <mappers>-->
+<!--&lt;!&ndash;        这里因为书上用的eclipse,这里直接在idea的main目录下新建resource文件夹右击选择mark Directory as->>Resources root作为配置文件的资源目录就行了&ndash;&gt;-->
+<!--        <mapper resource="mappers/UserDaoMapper.xml"/>-->
+<!--    </mappers>-->
+<!--</configuration>-->
+<!-- 根标签 -->
+<configuration>
+<!--    <properties>-->
+<!--        <property name="driver" value="com.mysql.jdbc.Driver"/>-->
+<!--        <property name="url" value="jdbc:mysql://localhost:3306/refuse_classification?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true"/>-->
+<!--        <property name="username" value="root"/>-->
+<!--        <property name="password" value="367494"/>-->
+<!--    </properties>-->
+
+    <!-- 环境，可以配置多个，default：指定采用哪个环境 -->
+    <environments default="test">
+        <!-- id：唯一标识 -->
+        <environment id="test">
+            <!-- 事务管理器，JDBC类型的事务管理器 -->
+            <transactionManager type="JDBC" />
+            <!-- 数据源，池类型的数据源 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://localhost:3306/refuse_classification" />
+                <property name="username" value="root" />
+                <property name="password" value="367494" />
+            </dataSource>
+        </environment>
+<!--        <environment id="development">-->
+<!--            &lt;!&ndash; 事务管理器，JDBC类型的事务管理器 &ndash;&gt;-->
+<!--            <transactionManager type="JDBC" />-->
+<!--            &lt;!&ndash; 数据源，池类型的数据源 &ndash;&gt;-->
+<!--            <dataSource type="POOLED">-->
+<!--                <property name="driver" value="${driver}" /> &lt;!&ndash; 配置了properties，所以可以直接引用 &ndash;&gt;-->
+<!--                <property name="url" value="${url}" />-->
+<!--                <property name="username" value="${username}" />-->
+<!--                <property name="password" value="${password}" />-->
+<!--            </dataSource>-->
+<!--        </environment>-->
+    </environments>
+    <mappers>
+        <mapper resource="mappers/UserDaoMapper.xml"/>
+    </mappers>
+</configuration>

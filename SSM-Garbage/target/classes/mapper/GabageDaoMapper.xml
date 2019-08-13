@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wbb.ssm.dao.GarbageDao">
+
+    <select id="getGarbageByGname" resultType="wbb.ssm.entity.Garbage">
+         select gname,garbage.variety,`describe`,handle from garbage where gname like #{gname}
+    </select>
+
+    <insert id="insertGarbage" parameterType="wbb.ssm.entity.Garbage">
+        insert into garbage (gname, variety, `describe`, handle) VALUES (#{gname},#{variety},#{describe},#{handle})
+    </insert>
+</mapper>
