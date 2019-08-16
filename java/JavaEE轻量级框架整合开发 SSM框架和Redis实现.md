@@ -128,5 +128,253 @@ try {
 今天重装系统没备份装完发现github上面昨天写的忘记存了。。
 
 ## Spring
-自动注入  
+自动注入@Autowired在使用自动注入的时候会出现多个实现类IoC不知道该注入哪个这时候使用@Primary优先注入和@Qualifier写在@Autowired之后根据名称注入  
+`@Primary`例子:  
+
+```java
+@Component
+public class RoleController{
 @Autowired
+private RoleService roleService=null;
+}
+```
+
+```java
+@Component("roleService3")
+@Primary
+public class RoleServiceImpl3 implements RoleService{
+}
+```
+上面是优先注入RoleServiceImpl3  
+下面是根据别名roleService3注入RoleServiceImpl3  
+`@Qualifier`例子:  
+
+```java
+@Component
+public class RoleController{
+  @Autowired
+  @Qualifier("roleService3")
+  private RoleService roleService=null;
+}
+```
+可以在方法上使用@Bean装配Bean  
+其中包含四个配置项  
+1.name允许配置多个BeanName  
+2.autowire标志是否是一个引用的Bean对象,默认值是Autowire.NO  
+3.initMethod自定义初始化方法  
+4.destroyMethod自定义销毁方法  
+
+
+扫描包`@ComponentScan(basePackages={"com.ssm.dao.*"}) `
+或者xml的形式`<context:component-scan base-packe="com.ssm.dao.*"/>`  
+
+使用@Profile定义多个数据库连接池或者XML方式  
+激活profile需要自行激活  
+
+属性配置文件properties  
+1.使用注解方式加载属性文件@PropertySource  
+如@PropertySource(Value={"classpath:database-config.properties"})  
+使用注解@Value和占位符如@Value("${jdbc.database.driver}")引用已经定义好的配置  
+
+2.使用XML方式加载属性文件  
+<context:property-placeholder ignore-resource-not-found="true" location="classpath:database-config.properties"/>上面为true的属性代表允许文件不存在  
+配置多个属性文件  
+
+```html
+<property name="location">
+  <array>
+    <value>classpath:database-config.properties</value>
+    <value>classpath:log4j.properties</value>
+  </array>
+</property>
+```  
+### Spring表达式
+
+EL的使用例:  
+```java
+package wbb.test;
+
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+
+public class EL {
+    public static void main(String[] args) {
+        //表达式解析器
+        ExpressionParser parser=new SpelExpressionParser();
+        //设置表达式
+        Expression exp=parser.parseExpression("'hello world'");
+        String str= (String) exp.getValue();
+        System.out.println(str);
+        //通过EL访问普通方法
+        exp=parser.parseExpression("'hello world'.charAt(0)");
+        char ch=(Character) exp.getValue();
+        System.out.println(ch);
+        //通过EL访问的getter方法
+        exp=parser.parseExpression("'hello world'.bytes");
+        byte[] bytes=(byte[])exp.getValue();
+        System.out.println(bytes);
+        //通过EL访问属性,相当于"hello world".getBytes().length
+        exp=parser.parseExpression("'hello world'.bytes.length");
+        int length=(Integer)exp.getValue();
+        System.out.println(length);
+        exp=parser.parseExpression("new String('abc')");
+        String abc=(String)exp.getValue();
+        System.out.println(abc);
+    }
+}
+```
+EL可以用来创建对象  
+EL中注解@Value("#{}")  
+类的静态常量@Value("#(T(Math).PI)")  
+EL的各种运算  
+
+### AOP面向切面编程  
+AOP是Spring的一个重要方法
+
+AOP主要内容就是动态代理  
+* 代理的意思就是我只管做我要做的事,其他的详细实现内容由代理来做,比如旅游你只管吃喝玩,实现旅游的门票安排等等都由代理来做  
+* 代理有静态代理和动态代理  
+静态代理是在程序运行前就已经存在代理类的字节码文件.代理类和原始类在运行前就已经确定  
+动态代理采用反射技术在运行时才确认代理的方法  
+
+动态代理的例子:  
+先写接口类及实现类  
+如Human:  
+
+```java
+package com.wbb.aop;
+
+public interface Human {
+    public void eat() throws InterruptedException;
+    public void sleep() throws InterruptedException;
+    public void study() throws InterruptedException;
+    public void work() throws InterruptedException;
+}
+```
+
+然后是实现类:  
+Student:  
+Teacher:  
+```java
+package com.wbb.aop;
+
+public class Student implements Human{
+    public void eat() throws InterruptedException {
+        System.out.println("eat");
+        Thread.sleep(200);
+    }
+
+    public void sleep() throws InterruptedException {
+        System.out.println("sleep");
+        Thread.sleep(3000);
+    }
+
+    public void study() throws InterruptedException {
+        System.out.println("study");
+        Thread.sleep(1000);
+    }
+
+    public void work() throws InterruptedException {
+        System.out.println("work");
+        Thread.sleep(2500);
+    }
+}
+```
+```java
+package com.wbb.aop;
+
+public class Teacher implements Human{
+
+    public void eat() throws InterruptedException {
+        System.out.println("teacher eat");
+        Thread.sleep(1500);
+    }
+
+    public void sleep() throws InterruptedException {
+        System.out.println("teacher sleep");
+        Thread.sleep(1500);
+    }
+
+    public void study() throws InterruptedException {
+        System.out.println("teacher study");
+        Thread.sleep(2000);
+    }
+
+    public void work() throws InterruptedException {
+        System.out.println("teacher work");
+        Thread.sleep(3000);
+    }
+}
+```
+
+然后是代理类:  
+```java
+package com.wbb.aop;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+public class MyProxy implements InvocationHandler {
+    private Object target=null;
+    //绑定需要代理的对象
+    public Object bind(Object target){
+        this.target=target;
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(),target.getClass().getInterfaces(),this);
+    }
+    //实现具体逻辑
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        long start=System.currentTimeMillis();
+        Object obj=method.invoke(target,args);
+        System.out.println("============you spend time is: "+(System.currentTimeMillis()-start));
+        return obj;
+    }
+}
+```
+
+最后测试:  
+```java
+package wbb.test;
+
+import com.wbb.aop.Human;
+import com.wbb.aop.MyProxy;
+import com.wbb.aop.Student;
+import com.wbb.aop.Teacher;
+
+public class Test {
+    public static void main(String[] args) throws InterruptedException {
+        MyProxy myProxy=new MyProxy();
+        Human student=(Human)myProxy.bind(new Student());
+        student.eat();
+        student.sleep();
+        student.study();
+        student.work();
+        Human teacher=(Human) myProxy.bind(new Teacher());
+        teacher.eat();
+        teacher.sleep();
+        teacher.study();
+        teacher.work();
+    }
+}
+```
+
+运行结果:
+```
+eat
+============you spend time is: 201
+sleep
+============you spend time is: 3000
+study
+============you spend time is: 1001
+work
+============you spend time is: 2500
+teacher eat
+============you spend time is: 1500
+teacher sleep
+============you spend time is: 1501
+teacher study
+============you spend time is: 2000
+teacher work
+============you spend time is: 3000
+```
