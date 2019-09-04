@@ -1,0 +1,16 @@
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/Utils/HttpUtil.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/dao/ManageDao.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/service/GarbageService.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/entity/Garbage.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/entity/Manage.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/interceptor/IsLogin.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/web/GarbageController.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/dao/GarbageDao.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/service/impl/ManageServiceImpl.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/web/ManageController.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/Utils/Base64Util.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/service/impl/GarbageServiceImpl.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/Utils/Get_Access_Token.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/Utils/FileUtil.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/Utils/GsonUtils.java
+/home/arthas/Code/SSM/src/main/java/wbb/ssm/service/ManageService.java

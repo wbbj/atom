@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="external nofollow" >
+</head>
+
+
+<script>
+    // function managePage() {window.location.href="http://localhost:8080/SSM/index.html";}//返回管理员界面
+    // function manageLogin() {window.location.href="http://localhost:8080/SSM/login.html";}//进入登录界面
+
+    function managePage() {window.location.href="http://129.211.1.53:8080/SSM/index.html";}//返回管理员界面
+    function manageLogin() {window.location.href="http://129.211.1.53:8080/SSM/login.html";}//进入登录界面
+
+    //实现了点击切换表单域,不用的表单隐藏起来
+    function Recycle() {//可回收垃圾简介
+        var Recycle=document.getElementById("Recycle");
+        var Harm=document.getElementById("Harm");
+        var Wet=document.getElementById("Wet");
+        var Dry=document.getElementById("Dry");
+        if(Recycle.style.display==='none'){
+            Recycle.style.display='inline';
+            Harm.style.display='none';
+            Wet.style.display='none';
+            Dry.style.display='none';
+        }else {
+            Harm.style.display='none';
+            Wet.style.display='none';
+            Dry.style.display='none';
+        }
+    }
+    function Harm() {//有害垃圾简介
+        var Recycle=document.getElementById("Recycle");
+        var Harm=document.getElementById("Harm");
+        var Wet=document.getElementById("Wet");
+        var Dry=document.getElementById("Dry");
+        if(Harm.style.display==='none'){
+            Harm.style.display='inline';
+            Recycle.style.display='none';
+            Wet.style.display='none';
+            Dry.style.display='none';
+        }else {
+            Recycle.style.display='none';
+            Wet.style.display='none';
+            Dry.style.display='none';
+        }
+    }
+    function Wet() {//湿垃圾简介
+        var Recycle=document.getElementById("Recycle");
+        var Harm=document.getElementById("Harm");
+        var Wet=document.getElementById("Wet");
+        var Dry=document.getElementById("Dry");
+        if(Wet.style.display==='none'){
+            Wet.style.display='inline';
+            Recycle.style.display='none';
+            Harm.style.display='none';
+            Dry.style.display='none';
+
+        }else {
+            Recycle.style.display='none';
+            Harm.style.display='none';
+            Dry.style.display='none';
+        }
+    }
+    function Dry() {//干垃圾简介
+        var Recycle=document.getElementById("Recycle");
+        var Harm=document.getElementById("Harm");
+        var Wet=document.getElementById("Wet");
+        var Dry=document.getElementById("Dry");
+        if(Dry.style.display==='none'){
+            Dry.style.display='inline';
+            Recycle.style.display='none';
+            Harm.style.display='none';
+            Wet.style.display='none';
+
+        }else {
+            Recycle.style.display='none';
+            Harm.style.display='none';
+            Wet.style.display='none';
+        }
+    }
+
+    // 查询的ajax请求
+    $(document).ready(function () {
+        $("#select").click(function (event) {
+            event.preventDefault();
+            var gname = $("#name").val();
+            if (gname === "") {//未检测到有输入
+                alert("请输入要查询的垃圾");
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'text',
+                    url: 'getGarbageByGname',
+                    data: "gname="+encodeURI($('#name').val()),
+                    success: function (msg) {
+                        $('#list').text("");//清空id位list的区域
+                        if(msg==="0"){
+                            alert("请输入要查询的垃圾");
+                        }else if (msg==="-1"){//数据库中不存在此垃圾
+
+                            alert("未收录此垃圾或未定义此垃圾或不是垃圾")
+                        } else {//找到垃圾并显示出来动态创建表格
+
+
+                            for(i in msg.split(" "))
+                            {
+                                var tr;
+                                tr='<td>'+msg.split(" ")[i]+'</td>';
+                                $("#list").append('<tr>'+tr+'</tr>')
+                            }
+
+                        }
+                    }
+                })
+            }
+        })
+    });
+
+    $(document).ready(function () {
+        $("#upimg").click(function (event) {
+            event.preventDefault();
+            var formData = new FormData($("#up")[0]);
+            if (formData==="") {//未检测到有输入
+                alert("未检测到图片");
+            } else {
+                formData.append('img', $("#file")[0].files[0]);//把file添加进去  name命名为img
+                $.ajax({
+                    url: 'getGarbageByGname',
+                    data: formData,
+                    type: 'POST',
+                    async: true,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (msg) {
+                        $('#list').text("");//清空id位list的区域
+                        if(msg==="0"){
+                            alert("未查询到信息");
+                        }else if (msg==="-1"){//数据库中不存在此垃圾
+                            alert("未收录此垃圾或未定义此垃圾或不是垃圾")
+                        } else {//找到垃圾并显示出来动态创建表格
+
+                            for(i in msg.split(" "))
+                            {
+                                var tr;
+                                tr='<td>'+msg.split(" ")[i]+'</td>';
+                                $("#list").append('<tr>'+tr+'</tr>')
+                            }
+
+                        }
+                    },
+                    error: function() {
+                        alert("error");//失败
+                    }
+                })
+            }
+        })
+    });
+
+</script>
+
+<body>
+<!--页面跳转-->
+<div>
+    <button onclick="managePage()">垃圾分类管理界面</button>
+    <button onclick="manageLogin()">管理员登录</button>
+</div>
+<div>
+    <HR>
+</div>
+
+<!--整个显示区域-->
+<div style="width:800px; margin-left:auto; margin-right:auto; background-color:forestgreen; color:White; height:900px">
+
+    <!--        查询的区域-->
+
+    <form>
+
+        <input type="text" name="name" id="name"/><button id="select">查询</button>
+
+    </form>
+
+
+    <!--        拍照选项-->
+
+    <!--    本地图片-->
+    <form enctype="multipart/form-data" id="up">
+        <input type="file" name="file" id="file"/><button id="upimg">查询</button>
+    </form>
+
+    <!--    <form action="/SSM/up" method="post" enctype="multipart/form-data" id="up">-->
+    <!--        <label>上传图片：</label><input type="file" id="file"><button id="upimg">查询</button>-->
+    <!--    </form>-->
+    <!--        语音选项-->
+
+    <div>
+        <HR>
+    </div>
+    <div>
+        <table>
+            <tbody id="list">
+
+            </tbody>
+        </table>
+    </div>
+    <div style="width:600px; margin-left:auto; margin-right:auto;background-color:cornflowerblue; height:500px">
+
+        <button onclick="Recycle()">可回收物</button><button onclick="Harm()">有害垃圾</button><button onclick="Wet()">湿垃圾</button><button onclick="Dry()">干垃圾</button>
+
+        <div>
+            <table id="Recycle" style="display:inline">
+
+                <tr>
+                    <td>可回收物是指,适宜回收利用和资源化利用的生活废弃物,如废纸张、废塑料、废玻璃制品、废金属、废织物等</td>
+                </tr>
+                <tr>
+                    <td><h4>可回收物主要包括：</h4></td>
+                </tr>
+
+                <tr>
+                    <td>报纸、纸箱、书本、广告单、塑料瓶、塑料玩具、油桶、酒瓶、玻璃杯、易拉罐、旧铁锅、旧衣服、包、旧玩偶、旧数码产品、旧家电回收垃圾</td>
+                </tr>
+                <tr>
+                    <td><h4>可回收物投放要求</h4></td>
+                </tr>
+                <tr>
+                    <td>轻投轻放</td>
+                </tr>
+                <tr>
+                    <td>清洁干燥、避免污染,废纸尽量平整</td>
+                </tr>
+                <tr>
+                    <td>立体包装请清空内容物,清洁后压扁投放</td>
+                <tr>
+                    <td> 有尖锐边角的,应包裹后投放</td>
+                </tr>
+
+            </table>
+
+            <table id="Harm" style="display:none">
+                <tr>
+                    <td>有害垃圾是指，对人体健康或者自然环境造成直接或潜在危害的废弃物</td>
+                </tr>
+                <tr>
+                    <td><h4>有害垃圾主要包括：</h4></td>
+                </tr>
+
+                <tr>
+                    <td>废电池（充电电池、铅酸电池、镍镉电池、纽扣电池等）、废油漆、消毒剂、荧光灯管、含汞温度计、废药品及其包装物等</td>
+                </tr>
+                <tr>
+                    <td><h4>有害垃圾投放要求</h4></td>
+                </tr>
+                <tr>
+                    <td>投放时请注意轻放</td>
+                </tr>
+                <tr>
+                    <td>易破损的请连带包装或包裹后轻放</td>
+                </tr>
+                <tr>
+                    <td>如易挥发，请密封后投放</td>
+                </tr>
+            </table>
+
+            <table id="Wet" style="display:none">
+                <tr>
+                    <td>湿垃圾是指，日常生活垃圾产生的容易腐烂的生物质废弃物</td>
+                </tr>
+                <tr>
+                    <td><h4>湿垃圾主要包括：</h4></td>
+                </tr>
+
+                <tr>
+                    <td>食材废料、剩饭剩菜、过期食品、蔬菜水果、瓜皮果核、花卉绿植、中药残渣等</td>
+                </tr>
+                <tr>
+                    <td><h4>湿垃圾投放要求</h4></td>
+                </tr>
+                <tr>
+                    <td>纯流质的食物垃圾，如牛奶等，应直接倒进下水口</td>
+                </tr>
+                <tr>
+                    <td>有包装物的湿垃圾应将包装物去除后分类投放，包装物请投放到对应的可回收物或干垃圾容器</td>
+                </tr>
+            </table>
+
+            <table id="Dry" style="display:none">
+                <tr>
+                    <td>干垃圾是指，除可回收物、有害垃圾、湿垃圾以外的其它生活废弃物</td>
+                </tr>
+                <tr>
+                    <td><h4>干垃圾主要包括：</h4></td>
+                </tr>
+
+                <tr>
+                    <td>餐盒、餐巾纸、湿纸巾、卫生间用纸、塑料袋、食品包装袋、污染严重的纸、烟蒂、纸尿裤、一次性杯子、大骨头、贝壳、花盆等</td>
+                </tr>
+                <tr>
+                <tr>
+                    <td><h4>干垃圾投放要求</h4></td>
+                </tr>
+                <tr>
+                    <td>尽量沥干水分</td>
+                </tr>
+                <tr>
+                    <td>难以辨识类别的生活垃圾投入干垃圾容器内</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

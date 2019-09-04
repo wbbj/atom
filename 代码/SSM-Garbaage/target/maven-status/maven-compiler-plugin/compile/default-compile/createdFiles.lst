@@ -1,0 +1,16 @@
+wbb/ssm/Utils/Get_Access_Token.class
+wbb/ssm/entity/Manage.class
+wbb/ssm/web/ManageController.class
+wbb/ssm/service/impl/GarbageServiceImpl.class
+wbb/ssm/entity/Garbage.class
+wbb/ssm/dao/ManageDao.class
+wbb/ssm/Utils/FileUtil.class
+wbb/ssm/interceptor/IsLogin.class
+wbb/ssm/Utils/HttpUtil.class
+wbb/ssm/service/impl/ManageServiceImpl.class
+wbb/ssm/service/GarbageService.class
+wbb/ssm/Utils/GsonUtils.class
+wbb/ssm/dao/GarbageDao.class
+wbb/ssm/web/GarbageController.class
+wbb/ssm/service/ManageService.class
+wbb/ssm/Utils/Base64Util.class

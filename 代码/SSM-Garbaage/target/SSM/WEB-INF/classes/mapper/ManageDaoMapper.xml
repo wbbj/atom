@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wbb.ssm.dao.ManageDao">
+    <select id="queryManege" resultType="wbb.ssm.entity.Manage">
+        select username,password from test_login where username=#{username}
+    </select>
+</mapper>
