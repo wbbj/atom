@@ -143,3 +143,9 @@ public class RedisConfig {
     }
 }
 ```
+
+在使用的时候template.setConnectionFactory(factory);这里可能会爆红,问题是出在    
+如果用的spring2  则原因是缺少spring-dao.jar  
+如果用的是spring3 则原因是缺少org.springframework.transaction-  
+
+我使用的是2  
